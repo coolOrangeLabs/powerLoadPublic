@@ -8,25 +8,25 @@ jobs:
     runs-on: windows-2019
 
     steps:
-    - name: Checkout code
+    - name: Checkout source repo
       uses: actions/checkout@v4
       with:
         repository: coolOrangeLabs/powerLoad
         token: ${{ secrets.SOURCE_REPO_TOKEN }}
+        path: source-repo
 
 
 
 
-
-    - name: Checkout current repo
+    - name: Checkout target repo
       uses: actions/checkout@v4
       with:
         repository: ${{ github.repository }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        path: current-repo
+        path: target-repo
 
     - name: Copy documentation to New Repository
-      run: cp ${{ github.workspace }}/README.md ./current-repo/README.md
+      run: cp ${{ github.workspace }}/source-repo/README.md ${{ github.workspace }}/target-repo/README.md
       working-directory: .
 
     - name: Commit docuemntation changes
