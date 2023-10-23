@@ -9,7 +9,11 @@ jobs:
     runs-on: windows-2019
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        repository: coolOrangeLabs/powerLoad
+        token: ${{ secrets.SOURCE_REPO_TOKEN }}
 
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1.3.1
