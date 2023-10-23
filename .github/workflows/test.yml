@@ -36,3 +36,4 @@ jobs:
         git add .
         git commit -m "Update documentation"
         git push origin main
+      working-directory: target-repo
