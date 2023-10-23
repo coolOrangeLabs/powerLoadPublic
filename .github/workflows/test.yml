@@ -1,0 +1,28 @@
+name: Release
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        repository: coolOrangeLabs/powerLoad
+        token: ${{ secrets.SOURCE_REPO_TOKEN }}
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with: 
+        tag_name: ${{ github.run_number }}
+        release_name: Release v1.0.${{ github.run_number }}
+        
+    - name: Copy documentation to New Repository
+      run: cp ${{ github.workspace }}/README.md ./README.md
+      working-directory: .
