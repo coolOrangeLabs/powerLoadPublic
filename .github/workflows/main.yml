@@ -79,6 +79,7 @@ jobs:
         asset_path: ./build2024.zip
         asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2024.zip
         asset_content_type: application/zip
+        
     - name: Copy documentation to New Repository
         run: |
           cp ${{ github.workspace }}/README.md ./README.md
