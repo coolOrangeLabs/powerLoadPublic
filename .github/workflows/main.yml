@@ -1,0 +1,77 @@
+name: Release
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1.3.1
+      
+    - name: Setup NuGet.exe for use with actions
+      # You may pin to the exact commit or the version.
+      # uses: NuGet/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f
+      uses: NuGet/setup-nuget@v1.2.0
+      
+    - name: Restore Packages
+      run: nuget restore powerload.sln
+      
+    - name: Build solution
+      run: |
+        msbuild powerload.sln /p:Platform="Any CPU - Vault 2022"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+      env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with: 
+        tag_name: ${{ github.run_number }}
+        release_name: Release v1.${{ github.run_number }}
+        
+    - name: Creaete Zip
+      run: |
+        Compress-Archive -Path "${{ github.workspace }}/CmdLets/bin/Release/Vault_2022/*" -DestinationPath "${{ github.workspace }}/build2022.zip"
+        Compress-Archive -Path "${{ github.workspace }}/CmdLets/bin/Release/Vault_2023/*" -DestinationPath "${{ github.workspace }}/build2023.zip"
+        Compress-Archive -Path "${{ github.workspace }}/CmdLets/bin/Release/Vault_2024/*" -DestinationPath "${{ github.workspace }}/build2024.zip"
+
+        
+    - name: Upload release asset v2022
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./build2022.zip
+        asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2022.zip
+        asset_content_type: application/zip
+
+    - name: Upload release asset v2023
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./build2023.zip
+        asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2023.zip
+        asset_content_type: application/zip
+        
+    - name: Upload release asset v2024
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./build2024.zip
+        asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2024.zip
+        asset_content_type: application/zip
