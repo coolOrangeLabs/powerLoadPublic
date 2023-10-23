@@ -26,7 +26,9 @@ jobs:
         path: target-repo
 
     - name: Copy documentation to New Repository
-      run: cp ${{ github.workspace }}/source-repo/README.md ${{ github.workspace }}/target-repo/README.md
+      run: |
+        cp ${{ github.workspace }}/source-repo/README.md ${{ github.workspace }}/target-repo/README.md
+        cp ${{ github.workspace }}/source-repo/CmdLets/doc/*.md ${{ github.workspace }}/target-repo/CmdLets/doc/
       working-directory: .
 
     - name: Commit docuemntation changes
