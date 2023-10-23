@@ -28,6 +28,7 @@ jobs:
     - name: Copy documentation to New Repository
       run: |
         cp ${{ github.workspace }}/source-repo/README.md ${{ github.workspace }}/target-repo/README.md
+        mkdir -p ${{ github.workspace }}/target-repo/CmdLets/doc/
         cp ${{ github.workspace }}/source-repo/CmdLets/doc/*.md ${{ github.workspace }}/target-repo/CmdLets/doc/
       working-directory: .
 
