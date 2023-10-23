@@ -14,15 +14,25 @@ jobs:
         repository: coolOrangeLabs/powerLoad
         token: ${{ secrets.SOURCE_REPO_TOKEN }}
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with: 
-        tag_name: ${{ github.run_number }}
-        release_name: Release v1.0.${{ github.run_number }}
-        
+
+
+
+
+    - name: Checkout current repo
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: current-repo
+
     - name: Copy documentation to New Repository
-      run: cp ${{ github.workspace }}/README.md ./README.md
+      run: cp ${{ github.workspace }}/README.md ./current-repo/README.md
       working-directory: .
+
+    - name: Commit docuemntation changes
+      run: |
+        git config user.name "Marco Mirandola"
+        git config user.email "marco.mirandola@coolorange.com"
+        git add .
+        git commit -m "Update documentation"
+        git push origin main
