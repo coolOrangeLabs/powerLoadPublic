@@ -98,10 +98,10 @@ jobs:
         path: target-repo
 
     - name: Copy documentation to New Repository
+      shell: pwsh
       run: |
-        cp ${{ github.workspace }}\source-repo\README.md ${{ github.workspace }}\target-repo\README.md
-        mkdir -p ${{ github.workspace }}\target-repo\CmdLets\doc
-        cp ${{ github.workspace }}\source-repo\CmdLets\doc\*.md ${{ github.workspace }}\target-repo\CmdLets\doc\
+        copy-item ${{ github.workspace }}\source-repo\README.md ${{ github.workspace }}\target-repo\README.md -Force
+        copy-item ${{ github.workspace }}\source-repo\CmdLets\doc\*.md ${{ github.workspace }}\target-repo\CmdLets\doc\ -Force
       working-directory: .
 
     - name: Commit docuemntation changes
