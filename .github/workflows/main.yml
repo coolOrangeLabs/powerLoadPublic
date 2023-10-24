@@ -33,14 +33,16 @@ jobs:
       
     - name: Restore Packages
       run: nuget restore powerload.sln
+      working-directory: source-repo\
       
     - name: Build solution
       run: |
-        msbuild source-repo\powerload.sln /p:Platform="Any CPU - Vault 2022"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
-        msbuild source-repo\powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
-        msbuild source-repo\powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild powerload.sln /p:Platform="Any CPU - Vault 2022"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
       env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
+      working-directory: source-repo\
 
     - name: Create Release
       id: create_release
