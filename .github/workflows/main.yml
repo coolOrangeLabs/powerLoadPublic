@@ -8,11 +8,20 @@ jobs:
     runs-on: windows-2019
 
     steps:
-    - name: Checkout code
+    - name: Checkout source repo
       uses: actions/checkout@v4
       with:
         repository: coolOrangeLabs/powerLoad
         token: ${{ secrets.SOURCE_REPO_TOKEN }}
+        path: source-repo
+
+    - name: Build help file
+      shell: pwsh
+      run: |
+        Set-PSRepository PSGallery -InstallationPolicy Trusted
+        Install-Module -Name platyPS -Scope CurrentUser
+        Import-Module platyPS
+        New-ExternalHelp ${{ github.workspace }}\source-repo\CmdLets\doc -OutputPath ${{ github.workspace }}\source-repo\CmdLets\en-US\ -Force
 
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1.3.1
@@ -27,9 +36,9 @@ jobs:
       
     - name: Build solution
       run: |
-        msbuild powerload.sln /p:Platform="Any CPU - Vault 2022"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
-        msbuild powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
-        msbuild powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild source-repo\powerload.sln /p:Platform="Any CPU - Vault 2022"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild source-repo\powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild source-repo\powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
       env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
 
@@ -44,9 +53,9 @@ jobs:
         
     - name: Creaete Zip
       run: |
-        Compress-Archive -Path "${{ github.workspace }}/CmdLets/bin/Release/Vault_2022/*" -DestinationPath "${{ github.workspace }}/build2022.zip"
-        Compress-Archive -Path "${{ github.workspace }}/CmdLets/bin/Release/Vault_2023/*" -DestinationPath "${{ github.workspace }}/build2023.zip"
-        Compress-Archive -Path "${{ github.workspace }}/CmdLets/bin/Release/Vault_2024/*" -DestinationPath "${{ github.workspace }}/build2024.zip"
+        Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2022/*" -DestinationPath "${{ github.workspace }}/build2022.zip"
+        Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2023/*" -DestinationPath "${{ github.workspace }}/build2023.zip"
+        Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2024/*" -DestinationPath "${{ github.workspace }}/build2024.zip"
 
         
     - name: Upload release asset v2022
@@ -79,6 +88,26 @@ jobs:
         asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2024.zip
         asset_content_type: application/zip
         
+    - name: Checkout target repo
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: target-repo
+
     - name: Copy documentation to New Repository
-      run: cp ${{ github.workspace }}/README.md ./README.md
+      run: |
+        cp ${{ github.workspace }}/source-repo/README.md ${{ github.workspace }}/target-repo/README.md
+        mkdir -p ${{ github.workspace }}/target-repo/CmdLets/doc/
+        cp ${{ github.workspace }}/source-repo/CmdLets/doc/*.md ${{ github.workspace }}/target-repo/CmdLets/doc/
       working-directory: .
+
+    - name: Commit docuemntation changes
+      run: |
+        git config user.name "Marco Mirandola"
+        git config user.email "marco.mirandola@coolorange.com"
+        git add .
+        git commit -m "Update documentation"
+        git push origin main
+      working-directory: target-repo
+
