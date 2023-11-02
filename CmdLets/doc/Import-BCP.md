@@ -13,7 +13,7 @@ Imports the BCP packages to the target location.
 ## SYNTAX
 
 ```
-Import-BCP [-ImportPath] <String> [<CommonParameters>]
+Import-BCP [-ImportPath] <String> [-SkipFiles] [-SkipItems] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,6 +28,14 @@ PS C:\> Import-BCP -ImportPAth 'C:\temp\bcp'
 ```
 
 Imports the BCP-Package located at C:\temp\bcp.
+
+### Example 2
+```powershell
+PS C:\> Import-BCP -ImportPAth 'C:\temp\bcp' -SkipItems
+```
+
+Imports just the files from the BCP-Package located at C:\temp\bcp, and does not load the items, BOM, and item-file links.
+
 
 ## PARAMETERS
 
