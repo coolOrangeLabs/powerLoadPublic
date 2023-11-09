@@ -29,7 +29,7 @@ $alternativePaths = @{
 # specify your Inventor project file
 $projectFile = "$importPath\..\..\..\samples.ipj"
 # check for reference errors
-$refCheck = Resolve-InventorReferences -InventorProjectFile $projectFile -ErrorCSVPath "$exportPath\RefErrors.csv"
+$refCheck = Resolve-InventorReferences -InventorProjectFile $projectFile -AlternativePaths $alternativePaths -ErrorCSVPath "$exportPath\RefErrors.csv"
 if($refCheck.Errors -gt 0) { throw("Reference errors found") }
 
 $dbCheck = Test-PowerLoadDataBase -ErrorCSVPath "$exportPath\dbErrors.csv"
