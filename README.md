@@ -13,6 +13,23 @@ In all 3 cases, you must
 powerLoad helps you do just that. Your data is imported into a temporary powerLoad database where you can perform all necessary data manipulations at high speed, e.g. adding, removing or renaming properties, cleaning values, moving/renaming files and folders, checking and resolving file references and much more. Then powerLoad checks if your data matches the target vault to prevent the load from failing and finally creates a BCP package.
 powerLoad supports Delta-Loads for files, so you can create BCP packages that build on each other to overcome short windows of time in large data load projects.
 
+## Supported Vault versions
+
+Vault Professional 2024, 2023, 2022
+
+## Known limitations and issues
+
+Status at 22.01.2024
+- Export-BCP does not yet support delta
+- Import-BCP does not yet support delta
+- Get-VaultData currently not available
+- Item BOMs are current not supported
+- File BOM blobs not support. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused.
+- Import-BCP ignores secodary associated files
+- Resolve-AutoCadReferences currently not working 
+- Database field AlternativeReferenceFullPath current not supported
+
+
 ## Prerequisites
 
 Operating System: Windows
@@ -51,7 +68,9 @@ The powerLoad extension provides the following CmdLets: <br>
 Create a PowerShell Script, copy this code, and adapt and extend as needed.
 ```PowerShell
 $exportPath = "c:\temp\test_export" #path to where the DTU (BCP) packages shall be created
-Import-Module "c:\temp\powerLoad\v1.0.28\powerload.dll" #path to the powerLoad DLL
+$powerLoadPath = 'C:\temp\powerLoad\v1.0.28' #path to the powerLoad DLL
+Get-ChildItem -Path $powerLoadPath -Filter *.dll -Recurse | Unblock-File
+Import-Module "$powerLoadPath\powerload.dll" 
 Connect-powerLoadDatabase -Server "MARCOMIRAND7E20\POWERLOAD" -DatabaseName "test" -User "sa" -Password 'Pa$$w0rd' #connect to database 
 
 $files = Get-ChildItem -Path "C:\Autodesk\autodesk_inventor_2019_samples_sfx\Models\Assemblies\Scissors" -File -Recurse
