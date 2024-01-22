@@ -29,8 +29,6 @@ Database: MS SQL Server.
 3. If necessary, unblock all .dll Files or Run the script as Administrator (select all files, right click > properties, unblock)
 4. Create a new PowerShell script or use a sample from the [Samples](https://github.com/coolOrangeLabs/powerLoadPublic/tree/main/Samples) folder
 
-## Usage
-powerLoad may help
 
 ## Functions overview
 The powerLoad extension provides the following CmdLets: <br>
@@ -52,9 +50,9 @@ The powerLoad extension provides the following CmdLets: <br>
 
 Create a PowerShell Script, copy this code, and adapt and extend as needed.
 ```PowerShell
-$exportPath = "c:\temp\test_export"
-Import-Module "c:\temp\powerLoad\v3\powerload.dll"
-Connect-powerLoadDatabase -Server "MARCOMIRAND7E20\POWERLOAD" -DatabaseName "test" -User "sa" -Password 'Pa$$w0rd'
+$exportPath = "c:\temp\test_export" #path to where the DTU (BCP) packages shall be created
+Import-Module "c:\temp\powerLoad\v1.0.28\powerload.dll" #path to the powerLoad DLL
+Connect-powerLoadDatabase -Server "MARCOMIRAND7E20\POWERLOAD" -DatabaseName "test" -User "sa" -Password 'Pa$$w0rd' #connect to database 
 
 $files = Get-ChildItem -Path "C:\Autodesk\autodesk_inventor_2019_samples_sfx\Models\Assemblies\Scissors" -File -Recurse
 $rootDirectories = @{"$importPath"='$/Designs/Scissors'}
