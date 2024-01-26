@@ -1,0 +1,48 @@
+name: Release
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    steps:
+    - name: Checkout source repo
+      uses: actions/checkout@v4
+      with:
+        repository: coolOrangeLabs/powerLoad
+        token: ${{ secrets.SOURCE_REPO_TOKEN }}
+        path: source-repo
+
+    - name: Build help file
+      shell: pwsh
+      run: |
+        Set-PSRepository PSGallery -InstallationPolicy Trusted
+        Install-Module -Name platyPS -Scope CurrentUser
+        Import-Module platyPS
+        New-ExternalHelp ${{ github.workspace }}\source-repo\CmdLets\doc -OutputPath ${{ github.workspace }}\source-repo\CmdLets\en-US\ -Force
+        
+    - name: Checkout target repo
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: target-repo
+
+    - name: Copy documentation to New Repository
+      shell: pwsh
+      run: |
+        copy-item ${{ github.workspace }}\source-repo\README.md ${{ github.workspace }}\target-repo\README.md -Force
+        copy-item ${{ github.workspace }}\source-repo\CmdLets\doc\*.md ${{ github.workspace }}\target-repo\CmdLets\doc\ -Force
+      working-directory: .
+
+    - name: Commit docuemntation changes
+      run: |
+        git config user.name "Marco Mirandola"
+        git config user.email "marco.mirandola@coolorange.com"
+        git add .
+        git commit -m "Update documentation"
+        git push origin main
+      working-directory: target-repo
+
