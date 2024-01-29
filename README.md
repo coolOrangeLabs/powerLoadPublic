@@ -1,9 +1,9 @@
 # POWERLOAD 
 
-This PowerShell extension for powerLoad, is designed to streamline and automate various tasks related to data loading into Vault using the Autodesk DTU (aka. BCP). The load scenarios can be a 
-- data loading from file system, 
-- from a competitive or legacy system, 
-- or from Vault to Vault (merge, clean-up or move).
+This PowerShell extension for powerLoad, is designed to streamline and automate various tasks related to data loading into Vault using the Autodesk DTU (aka. BCP). The load scenarios can be a data loading
+- ... from file system, 
+- ... from a competitive or legacy system, 
+- ... or from Vault to Vault (merge, clean-up or move).
 
 In all 3 cases, you must 
 1. prepare your data so that it matches your target Vault,
@@ -20,31 +20,36 @@ Vault Professional 2024, 2023, 2022
 ## Known limitations and issues
 
 Status at 22.01.2024
-- Export-BCP does not yet support delta
+
+- Import-BCP ignores secodary associated files
+- Import-BCP does not import Folder-File Links
+- Import-BCP does not import Folder-Folder Links
+- Import-BCP does not import Folder-Item Links
 - Import-BCP does not yet support delta
+- Export-BCP does not yet support delta
 - Get-VaultData currently not available
 - Item BOMs are current not supported
 - File BOM blobs not support. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused.
-- Import-BCP ignores secodary associated files
 - Resolve-AutoCadReferences currently not working 
 - Database field AlternativeReferenceFullPath current not supported
 
 
 ## Prerequisites
 
-Operating System: Windows
+Operating System: Windows 10 and 11
 
-Installed Program: Autodesk Vault, coolOrange powerLoad ([download](https://www.coolorange.com/powerload-download-page))
+Installed Programs: Autodesk Vault, coolOrange powerLoad/bcpToolkit V24 ([download](https://www.coolorange.com/powerload-download-page)), Microsoft PowerShell, AutoCAD Mechanical if AutoCAD DWGs and/or Inventor if Inventor files to be analyzed for missing references
 
-Database: MS SQL Server. 
+Database: MS SQL Server 2017 or newer 
 
 
 ## Installation
 
-1. Download the Zip-File for your Vault version from the [Release](../../releases) area
-2. Extract the Zip-File into a local folder of your choice
-3. If necessary, unblock all .dll Files or Run the script as Administrator (select all files, right click > properties, unblock)
-4. Create a new PowerShell script or use a sample from the [Samples](https://github.com/coolOrangeLabs/powerLoadPublic/tree/main/Samples) folder
+1. Download bcpToolkit and run installer. You might unblock the exe before running the installer.
+2. Download the Zip-File for your Vault version from the [Release](../../releases) area. You might unblock the ZIP before extraction it.
+3. Extract the Zip-File into a local folder of your choice, e.g. "C:\coolOrange\powerLoad". 
+4. If necessary, unblock all .dll Files or Run the script as Administrator (select all files, right click > properties, unblock).
+5. Create a new PowerShell script or use a sample from the [Samples](https://github.com/coolOrangeLabs/powerLoadPublic/tree/main/Samples) folder.
 
 
 ## Functions overview
