@@ -27,11 +27,9 @@ Status at 22.01.2024
 - Import-BCP does not import Folder-Item Links
 - Import-BCP does not yet support delta
 - Export-BCP does not yet support delta
-- Get-VaultData currently not available
 - Item BOMs are current not supported
 - File BOM blobs not support. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused.
-- Resolve-AutoCadReferences currently not working 
-- Database field AlternativeReferenceFullPath current not supported
+- Database field AlternativeReferenceFullPath not yet supported
 
 
 ## Prerequisites
@@ -58,11 +56,13 @@ The powerLoad extension provides the following CmdLets: <br>
 - [**Connect-powerLoadDatabase**](./CmdLets/doc/Connect-PowerLoadDatabase.md): Creates or opens the powerLoad database
 - [**Import-BCP**](./CmdLets/doc/Import-BCP.md): Imports the BCP packages into the powerLoad database.
 - [**Import-FilesToDatabase**](./CmdLets/doc/Import-FilesToDatabase.md): Imports the files into the powerLoad database
+- [**Get-VaultData**](./CmdLets/doc/Get-VaultData.md): Imports data from Vault using a saved search
 - [**Invoke-PowerLoadSql**](./CmdLets/doc/Invoke-PowerLoadSql.md): Executes SQL statements to manipulate the data
 - [**Add-PowerLoadUDP**](./CmdLets/doc/Add-PowerLoadUDP.md): Adds a user defined property to the powerLoad database.
 - [**Remove-PowerLoadUDP**](./CmdLets/doc/Remove-PowerLoadUDP.md): Removes a user defined property from the powerLoad database.
 - [**Rename-PowerLoadUDP**](./CmdLets/doc/Rename-PowerLoadUDP.md): Renames a user defined property in the powerLoad database.
-- [**Resolve-InventorReferences**](./CmdLets/doc/Resolve-InventorReferences.md): Checks the Inventor references using the Inventor project file from the specified location and lists the references that could not be resolved.
+- [**Resolve-AutoCadReferences**](./CmdLets/doc/Resolve-AutoCadReferences.md): Checks the AutoCAD references and lists the references that could not be resolved.
+- [**Resolve-InventorReferences**](./CmdLets/doc/Resolve-InventorReferences.md): Checks the Inventor references using the Inventor project file and lists the references that could not be resolved.
 - [**Test-PowerLoadDataBase**](./CmdLets/doc/Test-PowerLoadDataBase.md): Tests the powerLoad database for errors.
 - [**Test-PowerLoadVaultBehaviors**](./CmdLets/doc/Test-PowerLoadVaultBehaviors.md): Tests your powerLoad data against your target Vault behaviors (configuration)
 - [**Export-BCP**](./CmdLets/doc/Export-BCP.md): Creates a DTU/BCP package

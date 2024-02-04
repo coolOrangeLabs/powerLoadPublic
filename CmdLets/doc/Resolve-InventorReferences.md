@@ -8,7 +8,7 @@ schema: 2.0.0
 # Resolve-InventorReferences
 
 ## SYNOPSIS
-Retrieves the Inventor project file from the specified location.
+Ivestigates the Inventor file references
 
 ## SYNTAX
 
@@ -18,9 +18,7 @@ Resolve-InventorReferences [-InventorProjectFile] <String> [[-AlternativePaths] 
 ```
 
 ## DESCRIPTION
-Retrieves the Inventor project file from the specified location.
-If not connected to the Database, the Program will return an Error.
-If you don't have permissions the a file or directory, it will be skipped.
+Checks all files in the powerLoad database with ContentSource Inventor and stores the resovlable references into the powerLoad database.
 
 ## EXAMPLES
 
@@ -29,14 +27,14 @@ If you don't have permissions the a file or directory, it will be skipped.
 PS C:\> Resolve-InventorReferences -InventorProjectFile 'C:\temp\Project.ipj' -ErrorCSVPath 'C:\temp\Errors.csv'
 ```
 
-Inserts the References from the given ipj File into your IDB. If any Errors occure, they will be written into the ErrorsCSVPath.
+Tries to resolve the references with the given project file. If any Errors occure, they will be written into the ErrorsCSVPath.
 
 ### Example 2
 ```powershell
 PS C:\> Resolve-InventorReferences -InventorProjectFile 'C:\temp\Project.ipj' -AlternativePaths @{"C:\temp" = "C:\User"}
 ```
 
-Inserts the References from the given ipj File into your IDB. If any Files could not be found in the C:\temp directory, they will be searched in the C:\User directory.
+Tries to resolve the references with the given project file. If any files could not be found in the C:\temp directory, they will be searched in the C:\User directory.
 
 ## PARAMETERS
 
