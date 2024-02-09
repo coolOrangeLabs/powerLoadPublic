@@ -1,11 +1,13 @@
-Import-Module "c:\temp\powerLoad\v3\powerload.dll"
+$powerLoadPath = "c:\temp\powerLoad\powerload.dll"
+Get-ChildItem -Path $powerLoadPath -Filter *.dll -Recurse | Unblock-File
+Import-Module $powerLoadPath
 
 # define your import and export paths
 $importPath = "C:\Autodesk\autodesk_inventor_2019_samples_sfx\Models\Assemblies\Scissors"
 $exportPath = "c:\temp\test_export"
 
 # define your database connection
-Connect-powerLoadDatabase -Server "MARCOMIRAND7E20\POWERLOAD" -DatabaseName "test" -User "sa" -Password "coo!Orange" #-ForceDatabaseCreation
+Connect-powerLoadDatabase -Server "localhost\POWERLOAD" -DatabaseName 'test' -User 'sa' -Password '' #-ForceDatabaseCreation
 
 # collect all files from the import path
 $files = Get-ChildItem -Path $importPath -File -Recurse -Exclude *.bak, *.lck, OldVersions
