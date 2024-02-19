@@ -8,7 +8,7 @@ schema: 2.0.0
 # Import-FilesToDatabase
 
 ## SYNOPSIS
-Copies the file names and folder names from the specified source directory to the configured powerLoad database.
+Pupulates the powerLoad database with folders and files from the given list of files
 
 ## SYNTAX
 
@@ -21,9 +21,9 @@ Import-FilesToDatabase [-Files] <String[]> [-AddVersions] [[-FileCategory] <Stri
 ```
 
 ## DESCRIPTION
-Copies the file names and folder names from the specified source directory to the configured powerLoad database.
-If not connected to the Database, the Program will return an Error.
-If you don't have permissions the a file or directory, it will be skipped.
+Pupulates the powerLoad database with folders and files from the given list of files and sets the NeedsReferenceAnalysis to 1 for new files.
+It checks whether the file exists and read permissions are granted.
+If same file is imported, it checks whether the last modified date and the file size are the same. If not, it treats the file like an update or new revision, updates the database and sets the NeedsReferenceAnalysis to 1
 
 ## EXAMPLES
 
@@ -48,7 +48,7 @@ Gets All the Files in the Path C:\temp\Files and Imports them into your IDB with
 ## PARAMETERS
 
 ### -AddVersions
-Adds a new Version if some Files have changed. Default false
+Treats a file change/update as a new version
 
 ```yaml
 Type: SwitchParameter
