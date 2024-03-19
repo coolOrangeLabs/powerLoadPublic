@@ -13,7 +13,7 @@ Executes SQL statements on the specified database connection.
 ## SYNTAX
 
 ```
-Invoke-PowerLoadSql [[-Statement] <String>] [[-ScriptPath] <String>] [-OutputAsTable] [<CommonParameters>]
+Invoke-PowerLoadSql [[-Statement] <String>] [[-ScriptPath] <String>] [[-Timeout] <int>] [-OutputAsTable] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,6 +30,14 @@ PS C:\> Invoke-PowerLoadSql -Statement 'SELECT * FROM Files'
 Executes the SQL Statement 'SELECT * FROM Files' and prints out every match.
 
 ### Example 2
+```powershell
+PS C:\> Invoke-PowerLoadSql -Statement 'SELECT * FROM Files' -Timeout 90
+```
+
+Executes the SQL Statement 'SELECT * FROM Files' and prints out every match.
+The timeout for this SQL statement is set to 90 seconds
+
+### Example 3
 ```powershell
 PS C:\> Invoke-PowerLoadSql -ScriptPath 'C:\temp\script.sql'
 ```
@@ -78,6 +86,21 @@ Aliases:
 
 Required: False
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timeout
+Sets the SQL command timeout in seconds. If not specified, the default timeout will apply for the SQL statement
+
+```yaml
+Type: int
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
