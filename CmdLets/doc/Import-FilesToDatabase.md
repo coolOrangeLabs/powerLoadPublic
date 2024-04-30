@@ -13,50 +13,91 @@ Pupulates the powerLoad database with folders and files from the given list of f
 ## SYNTAX
 
 ```
-Import-FilesToDatabase [-Files] <String[]> [[-rootDirectories] <Hashtable>] [-AddVersions] [[-ErrorCSVPath] <String>] [<CommonParameters>]
+Import-FilesToDatabase [-FileName -plFileInfo -FileObject] [[-rootDirectories] <Hashtable>] [-AddVersions] [[-ErrorCSVPath] <String>] [<CommonParameters>]
 ```
-
 ## DESCRIPTION
-Pupulates the powerLoad database with folders and files from the given list of files and sets the NeedsReferenceAnalysis to 1 for new files.
-It checks whether the file exists and read permissions are granted.
-If same file is imported, it checks whether the last modified date and the file size are the same. If not, it treats the file like an update or new revision, updates the database and sets the NeedsReferenceAnalysis to 1
+Populates a powerLoad database with folders and files that are piped into the cmdlet and sets NeedsReferenceAnalysis to 1 for new files.
+If the same file is imported and the modified date and file size are not the same, it treats the imported file as a new revision, updates the database, and sets NeedsReferenceAnalysis to 1 
 
 ## EXAMPLES
 
 ### Example 1
-```powershell
-PS C:\> $files = Get-ChildItem -Path 'C:\temp\Files' -Recurse
-		$pathsArray = $files | ForEach-Object { $_.FullName }
-		Import-FilesToDatabase -Files $pathsArray 
+```
+powershell
+PS C:\> Get-ChildItem -Path 'C:\temp\Files' -File -Recurse |
+ForEach-Object -Process {
+    @{"Name" = $_.Name; 
+    "FullName" = $_.FullName;
+    "Extension" = $_.Extension;
+    "CreationTime" = $_.CreationTimeUtc;
+    "LastWriteTime" = $_.LastWriteTimeUtc;
+    "Length" = $_.Length }
+}|Import-FilesToDatabase -plFileInfo -AddVersions -ErrorCSVPath 'C:\temp\Output\Error.csv'
 ```
 
-Gets All the Files in the Path C:\temp\Files and Imports them into your IDB with the Dafault Values.
+Gets all the files in the path C:\temp\Files and Imports them into your IDB with default values.
+Outputs an Error log to C:\temp\Output\Error.csv. When there are some changes in a file, a new version will be added.
 
 ### Example 2
-```powershell
-PS C:\> $files = Get-ChildItem -Path 'C:\temp\Files' -Recurse
-		$pathsArray = $files | ForEach-Object { $_.FullName }
-		Import-FilesToDatabase -Files $pathsArray -AddVersions -ErrorCSVPath 'C:\temp\Errors.csv' 
+
+```powershell 
+PS C:\> Get-ChildItem -Path $ImportPath -File -Recurse | 
+        Import-FilesToDatabase -FileObject
 ```
 
-Gets All the Files in the Path C:\temp\Files and Imports them into your IDB with the given Values. If any errors occure, they will be written into the File C:\temp\Errors.csv. When there are some changes in a file, a new version will be added.
+Imports files into database at location $ImportPath. Takes in FileInfo objects.
 
 ## PARAMETERS
 
-### -Files
-The Files to Import. Example: $files
+
+### -FileName
+
+Dictates that you are passing in the names of Files. Not recommended, as you can run into file security issues and some locations may have IT issues.
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: SwitchParameter
+Parameter Sets: (FilePathString)
 Aliases:
 
-Required: True
-Position: 0
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### -plFileInfo
+
+Dictates that you are passing in a hashtable of relevant values.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (plFileInfo)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FileObject
+
+Dictates that you are passin in FileInfo objects
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (FileInfoObject)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 
 ### -rootDirectories
 Specify Rootdirectories which get replaced by $. Example: @{"C:\TEMP\sample" = "$"}
