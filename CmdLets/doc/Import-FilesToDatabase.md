@@ -13,7 +13,7 @@ Pupulates the powerLoad database with folders and files from the given list of f
 ## SYNTAX
 
 ```
-Import-FilesToDatabase [-FileName -plFileInfo -FileObject] [[-rootDirectories] <Hashtable>] [-AddVersions] [[-ErrorCSVPath] <String>] [<CommonParameters>]
+Import-FilesToDatabase [-FileName -plFileInfo -FileObject] [[-rootDirectories] <Hashtable>] [-AddVersions] [-AddUsers] [[-ErrorCSVPath] <String>] [<CommonParameters>]
 ```
 ## DESCRIPTION
 Populates a powerLoad database with folders and files that are piped into the cmdlet and sets NeedsReferenceAnalysis to 1 for new files.
@@ -128,6 +128,22 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### -AddUsers
+Includes file author as the creation user
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 
 ### -ErrorCSVPath
 The Path for the CSV File with all Errors in it. Example: "C:\temp\Vault\Errors.csv"
