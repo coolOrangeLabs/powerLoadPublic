@@ -15,21 +15,21 @@ powerLoad supports Delta-Loads for files, so you can create BCP packages that bu
 
 ## Supported Vault versions
 
-Vault Professional 2024, 2023, 2022
+Vault Professional 2025, 2024, 2023
 
 ## Known limitations and issues
 
-Status at 22.01.2024
+Status at 27.08.2024
 
 - Import-BCP ignores secodary associated files
-- Import-BCP does not import Folder-File Links
-- Import-BCP does not import Folder-Folder Links
 - Import-BCP does not import Folder-Item Links
 - Import-BCP does not yet support delta
 - Export-BCP does not yet support delta
 - Item BOMs are current not supported
 - File BOM blobs not support. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused.
 - Database field AlternativeReferenceFullPath not yet supported
+- Export-BCP and Import-BCP may run into SQL command timeout when used for very huge data.
+If that happens, the user can increase the setting 'CommandTimeout' in the config file 'DatabaseManager.dll.config' in the install location. By default it is set to 900 seconds
 
 
 ## Prerequisites

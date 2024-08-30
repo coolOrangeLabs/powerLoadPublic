@@ -23,6 +23,7 @@ Exports the Data from the IDB to a BCP-Package.
 If not connected to the Database, the Program will return an Error.
 If the ExportDirectory does not exist, it will be created.
 If the VaultConnection is successful, the Export will produce a delta BCP-Package.
+If used on huge databases, the cmdlet may run into SQL connection timeout. In this case, increase the 'CommandTimeout' in the file 'DatabaseManager.dll.config' and try again
 
 ## EXAMPLES
 

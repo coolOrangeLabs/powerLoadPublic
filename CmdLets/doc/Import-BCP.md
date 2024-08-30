@@ -19,6 +19,7 @@ Import-BCP [-ImportPath] <String> [-SkipFiles] [-SkipItems] [<CommonParameters>]
 ## DESCRIPTION
 Imports the BCP packages to the target location.
 If not connected to the Database, the Program will return an Error.
+If used on huge databases, the cmdlet may run into SQL connection timeout. In this case, increase the 'CommandTimeout' in the file 'DatabaseManager.dll.config' and try again
 
 ## EXAMPLES
 
