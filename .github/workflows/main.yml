@@ -37,9 +37,9 @@ jobs:
       
     - name: Build solution
       run: |
-        msbuild powerload.sln /p:Platform="Any CPU - Vault 2022"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
         msbuild powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
         msbuild powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
+        msbuild powerload.sln /p:Platform="Any CPU - Vault 2025"  /p:Configuration=Release /p:AssemblyVersionNumber=1.0.${{ github.run_number }}.0
       env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
       working-directory: source-repo\
@@ -55,21 +55,11 @@ jobs:
         
     - name: Creaete Zip
       run: |
-        Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2022/*" -DestinationPath "${{ github.workspace }}/build2022.zip"
         Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2023/*" -DestinationPath "${{ github.workspace }}/build2023.zip"
         Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2024/*" -DestinationPath "${{ github.workspace }}/build2024.zip"
+        Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2025/*" -DestinationPath "${{ github.workspace }}/build2025.zip"
 
         
-    - name: Upload release asset v2022
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./build2022.zip
-        asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2022.zip
-        asset_content_type: application/zip
-
     - name: Upload release asset v2023
       uses: actions/upload-release-asset@v1
       env:
@@ -79,7 +69,7 @@ jobs:
         asset_path: ./build2023.zip
         asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2023.zip
         asset_content_type: application/zip
-        
+
     - name: Upload release asset v2024
       uses: actions/upload-release-asset@v1
       env:
@@ -88,6 +78,16 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ./build2024.zip
         asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2024.zip
+        asset_content_type: application/zip
+        
+    - name: Upload release asset v2025
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./build2025.zip
+        asset_name: powerload-V1.0.${{ github.run_number }}-Vault 2025.zip
         asset_content_type: application/zip
         
     - name: Checkout target repo
