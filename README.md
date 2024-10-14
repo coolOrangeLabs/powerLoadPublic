@@ -21,13 +21,13 @@ Vault Professional 2025, 2024, 2023
 
 Status at 27.08.2024
 
+- Avoid hyphen (-) in the SQL database name. Parameter '-ForceDatabaseCreation' will not work, if a hyphen (-) is in the SQL database name. Use underscore instead.
 - Import-BCP ignores secodary associated files
 - Import-BCP does not import Folder-Item Links
 - Import-BCP does not yet support delta
 - Export-BCP does not yet support delta
-- Item BOMs are current not supported
-- File BOM blobs not support. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused.
-- Database field AlternativeReferenceFullPath not yet supported
+- Item BOMs are currently not supported
+- File BOM blobs are not supported. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused.
 - Export-BCP and Import-BCP may run into SQL command timeout when used for very huge data.
 If that happens, the user can increase the setting 'CommandTimeout' in the config file 'DatabaseManager.dll.config' in the install location. By default it is set to 900 seconds
 
