@@ -8,7 +8,7 @@ schema: 2.0.0
 # Import-FilesToDatabase
 
 ## SYNOPSIS
-Populates the powerLoad database with folders and files from the given list of files
+Pupulates the powerLoad database with folders and files from the given list of files
 
 ## SYNTAX
 
@@ -23,7 +23,7 @@ If the same file is imported and the modified date and file size are not the sam
 
 ### Example 1
 ```
-PowerShell
+powershell
 PS C:\> Get-ChildItem -Path 'C:\temp\Files' -File -Recurse |
 ForEach-Object -Process {
     @{"Name" = $_.Name; 
@@ -84,7 +84,7 @@ Accept wildcard characters: False
 
 ### -FileObject
 
-Dictates that you are passing in FileInfo objects
+Dictates that you are passin in FileInfo objects
 
 ```yaml
 Type: SwitchParameter
