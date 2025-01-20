@@ -10,7 +10,8 @@ In all 3 cases, you must
 2. validate if your data fits with your target Vault,
 3. and create a valid DTU package which can be loaded into your Vault.
 
-powerLoad helps you do just that. Your data is imported into a temporary powerLoad database where you can perform all necessary data manipulations at high speed, e.g. adding, removing or renaming properties, cleaning values, moving/renaming files and folders, checking and resolving file references and much more. There are powerLoad cmdlets to check if your data matches the target vault to prevent the load from failing and finally creates a BCP package.
+powerLoad helps you do just that. Your data is imported into a temporary powerLoad database where you can perform all necessary data manipulations at high speed, e.g. adding, removing or renaming properties, cleaning values, moving/renaming files and folders, checking and resolving file references and much more. Then powerLoad checks if your data matches the target vault to prevent the load from failing and finally creates a BCP package.
+powerLoad supports Delta-Loads for files, so you can create BCP packages that build on each other to overcome short windows of time in large data load projects.
 
 ## Supported Vault versions
 
@@ -20,12 +21,13 @@ Vault Professional 2025, 2024, 2023
 
 Status at 27.08.2024
 
-- Import-BCP ignores secondary associated files
+- Import-BCP ignores secodary associated files
 - Import-BCP does not import Folder-Item Links
 - Import-BCP does not yet support delta
 - Export-BCP does not yet support delta
-- Item BOMs are not supported
-- File BOM blobs are not supported. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused, if meta-data are not modified.
+- Item BOMs are current not supported
+- File BOM blobs not support. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused.
+- Database field AlternativeReferenceFullPath not yet supported
 - Export-BCP and Import-BCP may run into SQL command timeout when used for very huge data.
 If that happens, the user can increase the setting 'CommandTimeout' in the config file 'DatabaseManager.dll.config' in the install location. By default it is set to 900 seconds
 
@@ -34,17 +36,18 @@ If that happens, the user can increase the setting 'CommandTimeout' in the confi
 
 Operating System: Windows 10 and 11
 
-Installed Programs: Autodesk Vault, coolOrange powerLoad/bcpToolkit V25 ([download](https://www.coolorange.com/powerload-download-page)), Microsoft PowerShell, AutoCAD Mechanical if AutoCAD DWGs and/or Inventor if Inventor files to be analyzed for missing references.
+Installed Programs: Autodesk Vault, coolOrange powerLoad/bcpToolkit V24 ([download](https://www.coolorange.com/powerload-download-page)), Microsoft PowerShell, AutoCAD Mechanical if AutoCAD DWGs and/or Inventor if Inventor files to be analyzed for missing references
 
 Database: MS SQL Server 2017 or newer 
 
 
 ## Installation
 
-1. Download bcpToolkit and run installer. You may need to unblock the exe before running the installer.
-2. Download the Zip-File for your Vault version from the [Release](../../releases) area. You may need to unblock the ZIP before extract it.
+1. Download bcpToolkit and run installer. You might unblock the exe before running the installer.
+2. Download the Zip-File for your Vault version from the [Release](../../releases) area. You might unblock the ZIP before extraction it.
 3. Extract the Zip-File into a local folder of your choice, e.g. "C:\coolOrange\powerLoad". 
-4. Create a new PowerShell script or use a sample from the [Samples](https://github.com/coolOrangeLabs/powerLoadPublic/tree/main/Samples) folder.
+4. If necessary, unblock all .dll Files or Run the script as Administrator (select all files, right click > properties, unblock).
+5. Create a new PowerShell script or use a sample from the [Samples](https://github.com/coolOrangeLabs/powerLoadPublic/tree/main/Samples) folder.
 
 
 ## Functions overview
