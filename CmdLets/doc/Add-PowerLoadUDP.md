@@ -1,6 +1,6 @@
 ---
-external help file: powerload.dll-Help.xml
-Module Name: powerload
+external help file: AddPowerLoadUDP.dll-Help.xml
+Module Name: powerLoad
 online version:
 schema: 2.0.0
 ---
@@ -27,7 +27,6 @@ PS C:\> Add-PowerLoadUDP -Entity Files -Name 'test' -Type Text
 ```
 
 Adds a User Defined Property to the Files table of the powerLoad database
-
 
 ## PARAMETERS
 
@@ -58,7 +57,7 @@ Aliases:
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 

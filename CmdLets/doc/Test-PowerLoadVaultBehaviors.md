@@ -1,6 +1,6 @@
 ---
-external help file: powerload.dll-Help.xml
-Module Name: powerload
+external help file: TestPowerLoadVaultBehaviors.dll-Help.xml
+Module Name: powerLoad
 online version:
 schema: 2.0.0
 ---
@@ -25,7 +25,7 @@ It also returns an object with the error and warning counts.
 
 ### Example 1
 ```powershell
-PS C:\> Test-PowerLoadVaultBehaviors -Server "localhost" -Vault "Vault" -User "Administrator" -Password "Password" 
+PS C:\> Test-PowerLoadVaultBehaviors -Server "localhost" -Vault "Vault" -User "Administrator" -Password "Password"
 ```
 
 Tests the Vault "Vault" on the Server "localhost" with the User "Administrator" and the Password "Password" and returns the results as an object.
@@ -41,6 +41,7 @@ Tests the Vault "Vault" on the Server "localhost" with the User "Administrator" 
 ```powershell
 PS C:\> Test-PowerLoadVaultBehaviors
 ```
+
 Uses the default values to test the Vault "Vault" on the Server "localhost" with the User "Administrator" and no Password and returns the results as an object.
 
 ## PARAMETERS

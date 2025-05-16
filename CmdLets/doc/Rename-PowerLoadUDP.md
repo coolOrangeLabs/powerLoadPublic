@@ -1,6 +1,6 @@
 ---
-external help file: powerload.dll-Help.xml
-Module Name: powerload
+external help file: RenamePowerLoadUDP.dll-Help.xml
+Module Name: powerLoad
 online version:
 schema: 2.0.0
 ---

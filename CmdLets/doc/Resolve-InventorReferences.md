@@ -1,6 +1,6 @@
 ---
-external help file: powerload.dll-Help.xml
-Module Name: powerload
+external help file: ResolveInventorReferences.dll-Help.xml
+Module Name: powerLoad
 online version:
 schema: 2.0.0
 ---
@@ -14,11 +14,11 @@ Ivestigates the Inventor file references
 
 ```
 Resolve-InventorReferences [-InventorProjectFile] <String> [[-AlternativePaths] <Hashtable>]
- [[-ErrorCSVPath] <String>] [<CommonParameters>]
+ [[-ErrorCSVPath] <String>] [-InitialRun <Boolean>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks all files in the powerLoad database with ContentSource Inventor and stores the resovlable references into the powerLoad database.
+Checks all files in the powerLoad database with ContentSource Inventor and stores the resovlable references into the powerLoad database. Reference which cannot be resolved will be written to the ErrorCsvFile. Additionally, for missing/unknown references it also creates 'UnknownFileFileRelations' table.
 
 ## EXAMPLES
 
@@ -78,6 +78,21 @@ Aliases:
 
 Required: True
 Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InitialRun
+{{ Fill InitialRun Description }}
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

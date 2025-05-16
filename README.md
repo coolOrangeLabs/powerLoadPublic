@@ -56,6 +56,7 @@ The powerLoad extension provides the following CmdLets: <br>
 - [**Import-FilesToDatabase**](./CmdLets/doc/Import-FilesToDatabase.md): Imports the files into the powerLoad database
 - [**Get-VaultData**](./CmdLets/doc/Get-VaultData.md): Imports data from Vault using a saved search
 - [**Invoke-PowerLoadSql**](./CmdLets/doc/Invoke-PowerLoadSql.md): Executes SQL statements to manipulate the data
+- [**Import-InventorProperties**](./CmdLets/doc/Import-InventorProperties.md): Imports specified Inventor Properties of database files
 - [**Add-PowerLoadUDP**](./CmdLets/doc/Add-PowerLoadUDP.md): Adds a user defined property to the powerLoad database.
 - [**Remove-PowerLoadUDP**](./CmdLets/doc/Remove-PowerLoadUDP.md): Removes a user defined property from the powerLoad database.
 - [**Rename-PowerLoadUDP**](./CmdLets/doc/Rename-PowerLoadUDP.md): Renames a user defined property in the powerLoad database.

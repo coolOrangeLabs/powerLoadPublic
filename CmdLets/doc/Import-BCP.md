@@ -1,6 +1,6 @@
 ---
-external help file: powerload.dll-Help.xml
-Module Name: powerload
+external help file: ImportBCP.dll-Help.xml
+Module Name: powerLoad
 online version:
 schema: 2.0.0
 ---
@@ -13,7 +13,7 @@ Imports the BCP packages to the target location.
 ## SYNTAX
 
 ```
-Import-BCP [-ImportPath] <String> [-SkipFiles] [-SkipItems] [<CommonParameters>]
+Import-BCP -ImportPath <String> [-SkipFiles] [-SkipItems] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,17 +37,10 @@ PS C:\> Import-BCP -ImportPAth 'C:\temp\bcp' -SkipItems
 
 Imports just the files from the BCP-Package located at C:\temp\bcp, and does not load the items, BOM, and item-file links.
 
-
 ## PARAMETERS
 
 ### -ImportPath
 The path to the BCP package. Example: 'C:\temp\bcp'
-
-### -SkipFiles
-Skip the loading of Folders, Files, and References
-
-### -SkipItems
-Skip the loading of Items, BOMs, and File-Item links
 
 ```yaml
 Type: String
@@ -55,6 +48,36 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SkipFiles
+Skip the loading of Folders, Files, and References
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SkipItems
+Skip the loading of Items, BOMs, and File-Item links
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: 0
 Default value: None
 Accept pipeline input: False

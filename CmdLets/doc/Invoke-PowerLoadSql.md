@@ -1,6 +1,6 @@
 ---
-external help file: powerload.dll-Help.xml
-Module Name: powerload
+external help file: InvokePowerLoadSql.dll-Help.xml
+Module Name: powerLoad
 online version:
 schema: 2.0.0
 ---
@@ -13,7 +13,7 @@ Executes SQL statements on the specified database connection.
 ## SYNTAX
 
 ```
-Invoke-PowerLoadSql [[-Statement] <String>] [[-ScriptPath] <String>] [[-Timeout] <int>] [-OutputAsTable] [<CommonParameters>]
+Invoke-PowerLoadSql [[-Statement] <String>] [[-ScriptPath] <String>] [[-Timeout] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,7 +24,7 @@ If not connected to the Database, the Program will return an Error.
 
 ### Example 1
 ```powershell
-PS C:\> Invoke-PowerLoadSql -Statement 'SELECT * FROM Files' 
+PS C:\> Invoke-PowerLoadSql -Statement 'SELECT * FROM Files'
 ```
 
 Executes the SQL Statement 'SELECT * FROM Files' and prints out every match.
@@ -45,21 +45,6 @@ PS C:\> Invoke-PowerLoadSql -ScriptPath 'C:\temp\script.sql'
 Executes the given SQl script.
 
 ## PARAMETERS
-
-### -OutputAsTable
-Speciffies if the Output should be a table. Default false
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -ScriptPath
 The path to the SQL script file. Example: "C:\User\Scripts\script.sql"
@@ -95,7 +80,7 @@ Accept wildcard characters: False
 Sets the SQL command timeout in seconds. If not specified, the default timeout will apply for the SQL statement
 
 ```yaml
-Type: int
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 

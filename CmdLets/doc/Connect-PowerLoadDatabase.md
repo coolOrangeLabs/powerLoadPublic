@@ -1,6 +1,6 @@
 ---
-external help file: powerload.dll-Help.xml
-Module Name: powerload
+external help file: ConnectPowerLoadDatabase.dll-Help.xml
+Module Name: powerLoad
 online version:
 schema: 2.0.0
 ---
@@ -24,7 +24,6 @@ If the database exists, it will be deleted and recreated if the -ForceDatabaseCr
 If the database exists and the -ForceDatabaseCreation switch is not used, the existing database will be used.
 If the -ConnectString parameter is used, the -Server, -User, -Password, and -DatabaseName parameters will be ignored.
 If the -ConnectString parameter is not used, the -Server, -User, -Password, and -DatabaseName parameters are required.
-
 
 ## EXAMPLES
 
