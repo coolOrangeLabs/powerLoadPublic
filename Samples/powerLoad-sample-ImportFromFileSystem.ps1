@@ -12,15 +12,14 @@
 9. Validate data
 10. Create BCP-package
 
-The ZIP with the files for this sample script can be donwloaded from here: https://my.hidrive.com/lnk/FkYW1ohWc
+The ZIP with the sample files for this sample script can be donwloaded from here: https://my.hidrive.com/lnk/FkYW1ohWc
 #>
 
 
 #region 1: Load powerLoad modules 
-# TODO: Adjust folder to where the ZIP is extracted
-$powerLoadPath = "c:\coolOrange\powerLoad"
-Get-ChildItem -Path $powerLoadPath -Filter powerload.psd1 | Unblock-File   # Unblocks psd1 if windows blocked the downloaded ZIP
-Get-ChildItem -Path $powerLoadPath -Filter *.dll -Recurse | Unblock-File   # Unblocks DLLs if windows blocked the downloaded ZIP
+# TODO: Adjust Vault version for target Vault
+$VaultVersion = "2025"
+$powerLoadPath = "C:\Program Files\coolOrange\powerload\Vault_" + $VaultVersion
 Import-Module ($powerLoadPath + "\powerload.psd1") -Verbose
 #endregion
 
