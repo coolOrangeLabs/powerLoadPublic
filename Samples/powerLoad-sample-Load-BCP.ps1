@@ -8,10 +8,9 @@
 
 
 # Load powerLoad modules 
-# TODO: Adjust folder to where the ZIP is extracted
-$powerLoadPath = "C:\coolOrange\powerLoad"
-Get-ChildItem -Path $powerLoadPath -Filter powerload.psd1 | Unblock-File   #Unblocks powerload.psd1 if windows blocked the downloaded ZIP
-Get-ChildItem -Path $powerLoadPath -Filter *.dll -Recurse | Unblock-File   #Unblocks DLLs if windows blocked the downloaded ZIP
+# TODO: Adjust Vault version for target Vault
+$VaultVersion = "2025"
+$powerLoadPath = "C:\Program Files\coolOrange\powerload\Vault_" + $VaultVersion
 Import-Module ($powerLoadPath + "\powerload.psd1") -Verbose
 
 ### General settings (must be adjusted to your environment!)
