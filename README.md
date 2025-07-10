@@ -71,17 +71,24 @@ The powerLoad extension provides the following CmdLets: <br>
 
 Create a PowerShell Script, copy this code, and adapt and extend as needed.
 ```PowerShell
-$exportPath = "c:\temp\test_export" #path to where the DTU (BCP) packages shall be created
-$powerLoadPath = 'C:\temp\powerLoad\v1.0.28' #path to the powerLoad DLL
-Get-ChildItem -Path $powerLoadPath -Filter *.dll -Recurse | Unblock-File
-Import-Module "$powerLoadPath\powerload.dll" 
-Connect-powerLoadDatabase -Server "MARCOMIRAND7E20\POWERLOAD" -DatabaseName "test" -User "sa" -Password 'Pa$$w0rd' #connect to database 
+$VaultVersion = "2025"                                                            #Version of target Vault
+$powerLoadPath = "C:\Program Files\coolOrange\powerload\Vault_" + $VaultVersion   #path to the powerLoad DLL
+Import-Module ($powerLoadPath + "\powerload.psd1") 
+Connect-powerLoadDatabase -Server "MYSERVER\MYSQLINSTANCE" -DatabaseName "pl-test" -User "sa" -Password 'MySAPassword' #connect to database 
 
-$files = Get-ChildItem -Path "C:\Autodesk\autodesk_inventor_2019_samples_sfx\Models\Assemblies\Scissors" -File -Recurse
-$rootDirectories = @{"$importPath"='$/Designs/Scissors'}
-$result = Import-FilesToDatabase -Files $files.FullName -rootDirectories $rootDirectories -ErrorCSVPath "$exportPath\importErrors.csv"
+$exportPath = "c:\temp\test_export"                                               #path to where the DTU (BCP) package shall be created; path must exist
 
-$projectFile = "C:\Autodesk\autodesk_inventor_2019_samples_sfx\samples.ipj"
+#region File Import to IDB
+### Set folders for import 
+$ImportPath = "C:\Data\LegacyFilestore"
+$rootDirectories = @{"C:\Data\LegacyFilestore\Designs" = "$/Designs"; "C:\Data\LegacyFilestore\Content Center Files" = "$/Content Center Files" }    #specify root folders in Vault
+$ExcludeFolders = @("OLDVERSIONS", "OBSOLETE", "Presets")     ## Caution! This also exclude filnames with these strings
+$ExcludeFoldersFull = $ExcludeFolders -join '|'
+$IncludeFileExtensions = @("*.ipt", "*.iam", "*.idw", "*.ipn", "*.dwg", "*.dwf", "*.xls", "*.xlsx", "*.doc", "*.docx", "*.fres", "*.fsat", "*.fwiz")
+$result = Get-ChildItem -Path $ImportPath -File -Recurse -Include $IncludeFileExtensions | Where-Object {$_.FullName -notmatch $ExcludeFoldersFull} | Import-FilesToDatabase -FileObject -rootDirectories $rootDirectories -ErrorCSVPath ($exportPath + "ImportInIDB_errors.csv") 
+#endregion File Import to IDB
+
+$projectFile = "C:\Data\LegacyFilestore\Designs.ipj"           #Inventor project file to resolve legacy data
 $refCheck = Resolve-InventorReferences -InventorProjectFile $projectFile -ErrorCSVPath "$exportPath\RefErrors.csv"
 
 $dbCheck = Test-PowerLoadDataBase -ErrorCSVPath "$exportPath\dbErrors.csv"
