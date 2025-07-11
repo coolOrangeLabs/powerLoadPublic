@@ -18,7 +18,7 @@ Vault Professional 2025, 2024, 2023
 
 ## Known limitations and issues
 
-Status at 27.08.2024
+Status at 10.07.2025
 
 - Import-BCP ignores secodary associated files
 - Import-BCP does not import Folder-Item Links
@@ -42,10 +42,8 @@ Database: MS SQL Server 2017 or newer
 ## Installation
 
 1. Download bcpToolkit and run installer. You may need to unblock the exe before running the installer.
-2. Download the Zip-File for your Vault version from the [Release](../../releases) area. You may need to unblock the ZIP before extraction it.
-3. Extract the Zip-File into a local folder of your choice, e.g. "C:\coolOrange\powerLoad". 
-4. If necessary, unblock all .dll Files or Run the script as Administrator (select all files, right click > properties, unblock).
-5. Create a new PowerShell script or use a sample from the [Samples](https://github.com/coolOrangeLabs/powerLoadPublic/tree/main/Samples) folder.
+2. Download the "powerShell Extension (PSE) for powerLoad" from the [Release](../../releases) area and the run installer. You may need to unblock the MSI before running the installer.
+3. Create a new PowerShell script or use a sample from the [Samples](https://github.com/coolOrangeLabs/powerLoadPublic/tree/main/Samples) folder.
 
 
 ## Functions overview
