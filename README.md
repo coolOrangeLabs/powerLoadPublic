@@ -24,7 +24,8 @@ Status at 10.07.2025
 - Import-BCP does not import Folder-Item Links
 - Import-BCP does not yet support delta
 - Export-BCP does not yet support delta
-- Item BOMs are not supported
+- Export-BCP does not yet support Item Ids bigger than 2 147 483 647 (Int32)
+- Item BOMs are not supported!
 - File BOM blobsare not supported. However, in case of a Vault to Vault migration, the IDs remain the same, so the existing BOM blobs can be reused, if meta-data are not changed.
 - Export-BCP and Import-BCP may run into SQL command timeout when used for very huge data.
 If that happens, the user can increase the setting 'CommandTimeout' in the config file 'DatabaseManager.dll.config' in the install location. By default it is set to 900 seconds
