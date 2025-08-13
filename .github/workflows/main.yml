@@ -51,7 +51,7 @@ jobs:
         name: Release v25.0.${{ github.run_number }}
         draft: true
         prerelease: false
-        files:  PowerLoad_Installer/bin/Release/*.msi
+        files:  ${{ github.workspace }}/source-repo/PowerLoad_Installer/bin/Release/*.msi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
