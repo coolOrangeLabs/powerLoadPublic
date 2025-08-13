@@ -1,4 +1,4 @@
-#### Sample for moving the data of a sample Vault into a new target Vault into a new sub-folder   ##########
+  	#### Sample for moving the data of a sample Vault into a new target Vault into a new sub-folder   ##########
 ##   by loading a BCP-package into the powerLoad database (IDB)
 ##   moving all design files and folders into new sub-folder 'Division_007'
 ##   and cleaning some files and folders.
@@ -46,10 +46,12 @@ Invoke-PowerLoadSql -Statement "UPDATE Files SET LocalFullFileName = (REPLACE (L
 Invoke-PowerLoadSql -Statement "DELETE FROM Files where FileExtension in ('bak', 'zip')"
 # Create new Folder '$/Designs/Division_007' to which all files shall be moved
 Invoke-PowerLoadSql -Statement "INSERT INTO [dbo].[Folders] ([FolderID], [VaultFolderName], [VaultPath], [IsLibrary], [Category], [CreateUser], [CreateDate]) VALUES ((SELECT MAX(FolderID)+1 FROM Folders), 'Division_007','$/Designs/Division_007','0','Folder','powerLoad','2024-04-01 00:00')"
-# Move all Design files from folder '$/Designs' to '$/Designs/Division_007'
-Invoke-PowerLoadSql -Statement "UPDATE Folders SET VaultPath = REPLACE(VaultPath, '$/Designs/', '$/Designs/Division_007/') FROM Folders where VaultPath like '$/Designs/%'"
-# Correct ParentFolderID (folder structure is defined by 'VaultPath')
+# Move all Design folders under folder '$/Designs' to '$/Designs/Division_007'
+Invoke-PowerLoadSql -Statement "UPDATE Folders SET VaultPath = REPLACE(VaultPath, '$/Designs/', '$/Designs/Division_007/') FROM Folders where VaultPath like '$/Designs/%' and VaultFolderName <> 'Division_007'"
+# Correct ParentFolderID (folder structure is defined by 'VaultPath'), as Folders are move to '$/Designs/Division_007/'
 Invoke-PowerLoadSql -Statement "UPDATE Folders SET ParentFolderID = NULL where ParentFolderID = (SELECT FolderID FROM Folders where VaultFolderName = 'Designs')"
+# Move all Design files from folder '$/Designs' to '$/Designs/Division_007'(, if there are files in folder '$/Designs')
+Invoke-PowerLoadSql -Statement "UPDATE Files SET FolderID = (SELECT FolderID FROM Folders where VaultPath = '$/Designs/Division_007') where FolderID = (SELECT FolderID FROM Folders where VaultPath = '$/Designs')"# Set ('PDF', 'BMP', 'JPG') to 'Design Representation' and set behaviours, if your package contains 'PDF', 'BMP', 'JPG'
 # Set ('PDF', 'BMP', 'JPG') to 'Design Representation' and set behaviours, if your package contains 'PDF', 'BMP', 'JPG'
 Invoke-PowerLoadSql -Statement "UPDATE Files SET Category = 'Design Representation' where FileExtension in ('PDF', 'BMP', 'JPG') and Category = 'Base'"
 Invoke-PowerLoadSql -Statement "UPDATE Files SET LifecycleState = 'Released' where Category = 'Design Representation'"
@@ -74,3 +76,4 @@ $result = Export-BCP -ExportDirectory $ExportPath -DisableConfig 1
 ### General hints
 # Showing parameter for cmdlet
 Get-Help Export-BCP
+
