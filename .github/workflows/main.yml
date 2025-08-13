@@ -14,15 +14,6 @@ jobs:
         repository: coolOrangeLabs/powerLoad
         token: ${{ secrets.SOURCE_REPO_TOKEN }}
         path: source-repo
-        
-    - name: Build help file
-      shell: powershell
-      run: |
-        Set-PSRepository PSGallery -InstallationPolicy Trusted
-        Install-Module -Name platyPS -Scope CurrentUser
-        Import-Module platyPS
-        Import-Module ${{ github.workspace }}\source-repo\CmdLets\bin\Release\Vault_2025\powerLoad -Force
-        Update-MarkdownHelp ${{ github.workspace }}\source-repo\CmdLets\doc
 
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1.3.1
@@ -44,6 +35,14 @@ jobs:
       env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
       working-directory: source-repo\
+
+    - name: Build WiX Installer
+      run: |
+            msbuild PowerLoad_Installer/PowerLoad_Installer.wixproj /p:Configuration=Release /p:Platform=x64 /p:Major=25 /p:Minor=0 /p:Build=${{ github.run_number }} /p:Revision=0
+      env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+      working-directory: source-repo\
+
 
     - name: Create GitHub Release and Upload Asset
       uses: softprops/action-gh-release@v1
