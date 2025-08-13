@@ -14,14 +14,15 @@ jobs:
         repository: coolOrangeLabs/powerLoad
         token: ${{ secrets.SOURCE_REPO_TOKEN }}
         path: source-repo
-
+        
     - name: Build help file
-      shell: pwsh
+      shell: powershell
       run: |
         Set-PSRepository PSGallery -InstallationPolicy Trusted
         Install-Module -Name platyPS -Scope CurrentUser
         Import-Module platyPS
-        New-ExternalHelp ${{ github.workspace }}\source-repo\CmdLets\doc -OutputPath ${{ github.workspace }}\source-repo\CmdLets\en-US\ -Force
+        Import-Module ${{ github.workspace }}\source-repo\CmdLets\bin\Release\Vault_2025\powerLoad -Force
+        Update-MarkdownHelp ${{ github.workspace }}\source-repo\CmdLets\doc
 
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1.3.1
@@ -34,61 +35,26 @@ jobs:
     - name: Restore Packages
       run: nuget restore powerload.sln
       working-directory: source-repo\
-      
+
     - name: Build solution
       run: |
-        msbuild powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:AssemblyVersionNumber=1.25.${{ github.run_number }}.0
-        msbuild powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:AssemblyVersionNumber=1.25.${{ github.run_number }}.0
-        msbuild powerload.sln /p:Platform="Any CPU - Vault 2025"  /p:Configuration=Release /p:AssemblyVersionNumber=1.25.${{ github.run_number }}.0
+          msbuild powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:Version=25.0.${{ github.run_number }}.0
+          msbuild powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:Version=25.0.${{ github.run_number }}.0
+          msbuild powerload.sln /p:Platform="Any CPU - Vault 2025"  /p:Configuration=Release /p:Version=25.0.${{ github.run_number }}.0
       env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
       working-directory: source-repo\
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env: 
+    - name: Create GitHub Release and Upload Asset
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v25.0.${{ github.run_number }}
+        name: Release v25.0.${{ github.run_number }}
+        draft: true
+        prerelease: false
+        files:  PowerLoad_Installer/bin/Release/*.msi
+      env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with: 
-        tag_name: ${{ github.run_number }}
-        release_name: Release v1.25.${{ github.run_number }}
-        
-    - name: Creaete Zip
-      run: |
-        Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2023/*" -DestinationPath "${{ github.workspace }}/build2023.zip"
-        Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2024/*" -DestinationPath "${{ github.workspace }}/build2024.zip"
-        Compress-Archive -Path "${{ github.workspace }}/source-repo/CmdLets/bin/Release/Vault_2025/*" -DestinationPath "${{ github.workspace }}/build2025.zip"
-
-        
-    - name: Upload release asset v2023
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./build2023.zip
-        asset_name: powerload-V1.25.${{ github.run_number }}-Vault 2023.zip
-        asset_content_type: application/zip
-
-    - name: Upload release asset v2024
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./build2024.zip
-        asset_name: powerload-V1.25.${{ github.run_number }}-Vault 2024.zip
-        asset_content_type: application/zip
-        
-    - name: Upload release asset v2025
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./build2025.zip
-        asset_name: powerload-V1.25.${{ github.run_number }}-Vault 2025.zip
-        asset_content_type: application/zip
         
     - name: Checkout target repo
       uses: actions/checkout@v4
