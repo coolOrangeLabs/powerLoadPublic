@@ -45,13 +45,13 @@ jobs:
 
 
     - name: Create GitHub Release and Upload Asset
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: v25.0.${{ github.run_number }}
         name: Release v25.0.${{ github.run_number }}
         draft: true
         prerelease: false
-        files: source-repo\PowerLoad_Installer\bin\Release\*.msi
+        files: source-repo/PowerLoad_Installer/bin/Release/*.msi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
