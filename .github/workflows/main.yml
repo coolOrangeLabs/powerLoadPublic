@@ -2,7 +2,7 @@ name: Release
 on:
   workflow_dispatch:
 env:
-  SOURCE_REPO: my-org/private-installer-repo   # <== change to your private repo
+  SOURCE_REPO: coolorangeLabs/powerLoad   # <== change to your private repo
   MSI_PATTERN: '*.msi'  # <== optional: filter if multiple assets
 
 jobs:
