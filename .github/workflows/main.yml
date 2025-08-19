@@ -19,10 +19,6 @@ jobs:
         private-key: ${{ secrets.PRIVATE_KEY }}
         owner: ${{ github.repository_owner }}
     
-    - name: Download asset
-      uses: ./.github/actions/download
-      env:
-        GH_TOKEN: ${{ steps.generate_token.outputs.token }}.
 
     - name: Checkout source repo
       uses: actions/checkout@v4
