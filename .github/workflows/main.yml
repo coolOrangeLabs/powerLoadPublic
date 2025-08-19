@@ -1,6 +1,9 @@
 name: Release
 on:
   workflow_dispatch:
+env:
+  SOURCE_REPO: my-org/private-installer-repo   # <== change to your private repo
+  MSI_PATTERN: '*.msi'  # <== optional: filter if multiple assets
 
 jobs:
   build:
@@ -8,6 +11,19 @@ jobs:
     runs-on: windows-2025
 
     steps:
+    - name: Generate token
+      uses: actions/create-github-app-token@v1
+      id: generate_token
+      with:
+        app-id: ${{ vars.APP_ID }}
+        private-key: ${{ secrets.PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+    
+    - name: Download asset
+      uses: ./.github/actions/download
+      env:
+        GH_TOKEN: ${{ steps.generate_token.outputs.token }}.
+
     - name: Checkout source repo
       uses: actions/checkout@v4
       with:
@@ -15,66 +31,67 @@ jobs:
         token: ${{ secrets.SOURCE_REPO_TOKEN }}
         path: source-repo
 
-    - name: setup-msbuild
-      uses: microsoft/setup-msbuild@v1.3.1
-      
-    - name: Setup NuGet.exe for use with actions
-      # You may pin to the exact commit or the version.
-      # uses: NuGet/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f
-      uses: NuGet/setup-nuget@v1.2.0
-      
-    - name: Restore Packages
-      run: nuget restore powerload.sln
-      working-directory: source-repo\
-
-    - name: Build solution
+    - name: Get latest release from powerLoad Repo
+      id: get_release
+      shell: pwsh
       run: |
-          msbuild powerload.sln /p:Platform="Any CPU - Vault 2023"  /p:Configuration=Release /p:Version=25.0.${{ github.run_number }}.0
-          msbuild powerload.sln /p:Platform="Any CPU - Vault 2024"  /p:Configuration=Release /p:Version=25.0.${{ github.run_number }}.0
-          msbuild powerload.sln /p:Platform="Any CPU - Vault 2025"  /p:Configuration=Release /p:Version=25.0.${{ github.run_number }}.0
-      env:
-          GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      working-directory: source-repo\
+          $headers = @{ Authorization = "token ${{ steps.generate_token.outputs.token }}" }
+          $url = "https://api.github.com/repos/${{ env.SOURCE_REPO }}/releases/latest"
+          $response = Invoke-RestMethod -Uri $url -Headers $headers
 
-    - name: Build WiX Installer
+          # Find the first asset that matches MSI
+          $asset = $response.assets | Where-Object { $_.name -like "${{ env.MSI_PATTERN }}" } | Select-Object -First 1
+
+          if (-not $asset) { 
+            Write-Error "No MSI asset found in latest release of ${{ env.SOURCE_REPO }}" 
+            exit 1 
+          }
+
+          echo "asset_url=$($asset.url)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "asset_name=$($asset.name)" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+    - name: Download MSI from Repo B
+      shell: pwsh
       run: |
-            msbuild PowerLoad_Installer/PowerLoad_Installer.wixproj /p:Configuration=Release /p:Platform=x64 /p:Major=25 /p:Minor=0 /p:Build=${{ github.run_number }} /p:Revision=0
-      env:
-          GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      working-directory: source-repo\
-
+          Invoke-RestMethod `
+            -Uri $env:asset_url `
+            -Headers @{
+              Authorization = "token ${{ steps.generate_token.outputs.token }}"
+              Accept        = "application/octet-stream"
+            } `
+            -OutFile $env:asset_name
 
     - name: Create GitHub Release and Upload Asset
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v25.0.${{ github.run_number }}
-        name: Release v25.0.${{ github.run_number }}
-        draft: false
-        prerelease: false
-        files: source-repo/PowerLoad_Installer/bin/Release/*.msi
+          tag_name: v25.0.${{ github.run_number }}
+          name: Release v25.0.${{ github.run_number }}
+          draft: true
+          prerelease: false
+          files: ${{ env.asset_name }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
     - name: Checkout target repo
       uses: actions/checkout@v4
       with:
-        repository: ${{ github.repository }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: target-repo
+          repository: ${{ github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: target-repo
 
     - name: Copy documentation to New Repository
       shell: pwsh
       run: |
-        copy-item ${{ github.workspace }}\source-repo\README.md ${{ github.workspace }}\target-repo\README.md -Force
-        copy-item ${{ github.workspace }}\source-repo\CmdLets\doc\*.md ${{ github.workspace }}\target-repo\CmdLets\doc\ -Force
+          copy-item ${{ github.workspace }}\source-repo\README.md ${{ github.workspace }}\target-repo\README.md -Force
+          copy-item ${{ github.workspace }}\source-repo\CmdLets\doc\*.md ${{ github.workspace }}\target-repo\CmdLets\doc\ -Force
       working-directory: .
 
     - name: Commit docuemntation changes
       run: |
-        git config user.name "Marco Mirandola"
-        git config user.email "marco.mirandola@coolorange.com"
-        git add .
-        git commit -m "Update documentation"
-        git push origin main
+          git config user.name "Marco Mirandola"
+          git config user.email "marco.mirandola@coolorange.com"
+          git add .
+          git commit -m "Update documentation"
+          git push origin main
       working-directory: target-repo
 
