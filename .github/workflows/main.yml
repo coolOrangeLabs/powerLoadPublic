@@ -63,10 +63,9 @@ jobs:
       with:
           tag_name: v25.0.${{ github.run_number }}
           name: ${{ env.release_name }}
-          draft: true
+          draft: false
           prerelease: false
-          generate_release_notes: true
-          body: powerLoad Release ${{ env.release_name }}
+          body: powerLoad ${{ env.release_name }}
           files: ${{ env.asset_name }}
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
