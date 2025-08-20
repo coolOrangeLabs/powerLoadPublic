@@ -45,6 +45,8 @@ jobs:
 
           echo "asset_url=$($asset.url)" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "asset_name=$($asset.name)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "tag_name=$($response.tag_name)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "release_name=$($response.name)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
     - name: Download MSI from Repo B
       shell: pwsh
@@ -60,8 +62,8 @@ jobs:
     - name: Create GitHub Release and Upload Asset
       uses: softprops/action-gh-release@v1
       with:
-          tag_name: ${{ env.response.tag_name }}
-          name: Release ${{ env.response.name }}
+          tag_name: ${{ env.tag_name }}
+          name: Release ${{ env.release_name }}
           draft: true
           prerelease: false
           files: ${{ env.asset_name }}
