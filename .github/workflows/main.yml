@@ -47,6 +47,7 @@ jobs:
           echo "asset_name=$($asset.name)" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "tag_name=$($response.tag_name)" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "release_name=$($response.name)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "release_body=$($response.body)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
     - name: Download MSI from Repo B
       shell: pwsh
@@ -63,9 +64,10 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
           tag_name: ${{ env.tag_name }}
-          name: Release ${{ env.release_name }}
+          name: ${{ env.release_name }}
           draft: true
           prerelease: false
+          body: ${{ env.release_body }}
           files: ${{ env.asset_name }}
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
