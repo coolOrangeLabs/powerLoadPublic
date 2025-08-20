@@ -47,7 +47,7 @@ jobs:
           echo "asset_name=$($asset.name)" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "tag_name=$($response.tag_name)" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "release_name=$($response.name)" | Out-File -FilePath $env:GITHUB_ENV -Append
-          echo "release_body=$($response.body)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "release_body=$($response.description)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
     - name: Download MSI from Repo B
       shell: pwsh
